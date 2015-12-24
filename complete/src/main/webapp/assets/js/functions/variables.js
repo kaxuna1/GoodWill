@@ -8,7 +8,8 @@ var userColumns = ["სახელი", "გვარი", "მომხმა�
 var filialColumns = ["სახელი", 'მისამართი'];
 var regionColumns = ["სახელი"];
 var formatColumns = ["სახელი", "ფასი"];
-var productRequestsColumns = ["ფილიალი", "თარიღი"];
+var productRequestsColumns = ["#","ფილიალი", "თარიღი","მოთხოვნილი პროდუქტების რაოდენობა"];
+var tenderColumns=["#","სახელი","შექმნის დრო","დაწყების დრო","დამთავრების დრო"];
 var zoneColumns = ["სახელი", "რეგიონი"];
 var parcelViewColumns = {
     "address": "მისამართი",
@@ -40,3 +41,4 @@ var canCreateProduct = false;
 var canCreateUsers = false;
 var topPanelButtons=$("#topPanelButtons");
 var addZoneToSelectedVisible=false;
+var quantTypes=['','კგ.', "ცალი"];

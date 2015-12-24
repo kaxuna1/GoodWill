@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import main.Repositorys.*;
 import main.models.*;
+import main.models.Enum.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,9 +27,22 @@ public class ProductRequestsController {
 
     @RequestMapping("/getallproductrequests")
     @ResponseBody
-    public Page<ProductRequest> getAllProductRequests(int index){
-        return productRequestRepository.findByActive(true,constructPageSpecification(index));
+    public Page<ProductRequest> getAllProductRequests(@CookieValue("projectSessionId") long sessionId,int index){
+        Session session=sessionRepository.findOne(sessionId);
+        if(session.getUser().getType()== UserType.admin.getCODE()||session.getUser().getType()== UserType.sa.getCODE())
+            return productRequestRepository.findByActiveAndAccepted(true,false,constructPageSpecification(index));
+        else
+            return productRequestRepository.findByFilial(session.getUser().getFilial(),constructPageSpecification(index));
     }
+
+
+    @ResponseBody
+    @RequestMapping("/getacceptedproductrequests")
+    public Page<ProductRequest> getAcceptedProductRequest(int index){
+        return productRequestRepository.findByAcceptedAndSentToTender(true,false,constructPageSpecification(index));
+    }
+
+
     @RequestMapping("/requestProducts")
     @ResponseBody
     public boolean requestProducts(@CookieValue("projectSessionId") long sessionId, @RequestParam(value="productRequests") String requests){
@@ -56,6 +70,35 @@ public class ProductRequestsController {
         return true;
     }
 
+
+    @RequestMapping("/confirmrequest")
+    @ResponseBody
+    public boolean confirmRequest(long id){
+        try {
+            ProductRequest productRequest =productRequestRepository.findOne(id);
+            productRequest.setAccepted(true);
+            productRequestRepository.save(productRequest);
+        }catch (Exception e){
+            return false;
+        }
+        return true;
+    }
+    @RequestMapping("/declinerequest")
+    @ResponseBody
+    public boolean declineRequest(long id,String comment){
+        try {
+            ProductRequest productRequest = productRequestRepository.findOne(id);
+            productRequest.setAccepted(false);
+            productRequest.setActive(false);
+            productRequest.setComment(comment);
+            productRequestRepository.save(productRequest);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 
     private Pageable constructPageSpecification(int pageIndex) {
         Pageable pageSpecification = new PageRequest(pageIndex, 30);

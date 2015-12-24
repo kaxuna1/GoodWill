@@ -35,7 +35,7 @@ function loadUsersData(index, search) {
             //console.log($(this).val())
             loadParcelsData($(this).val(), "")
 
-        })
+        });
         if (canCreateUsers)
             $("#addNewDiv").html('<button id="addNewButton" data-target="#myModal" class="btn btn-sm btn-dark"><i class="fa fa-plus"></i>ახალი მომხმარებლის დამატება </button>')
         else $("#addNewDiv").html('');

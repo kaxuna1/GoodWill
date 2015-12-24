@@ -33,8 +33,10 @@ $(document).ready(function () {
             '<a href="#"><i class="icon-picture"></i><span data-translate="მომხმარებლები">მომხმარებლები</span></a></li>');
         navigation.append('<li id="loadProductRequestsButton" class="k">' +
             '<a href="#"><i class="icon-note"></i><span data-translate="პროდუქციის მოთხოვნები">პროდუქციის მოთხოვნები</span></a></li>');
-        navigation.append('<li id="loadZonesButton" class="k">' +
-            '<a href="#"><i class="icon-layers"></i><span data-translate="ზონები">ზონები</span></a></li>');
+        navigation.append('<li id="loadAcceptedRequestsButton" class="k">' +
+            '<a href="#"><i class="icon-layers"></i><span data-translate="დადასტურებული მოთხოვნები">დადასტურებული მოთხოვნები</span></a></li>');
+        navigation.append('<li id="loadTendersButton" class="k">' +
+            '<a href="#"><i class="icon-layers"></i><span data-translate="ტენდერები">ტენდერები</span></a></li>');
         $("#loadFilialsButton").click(function () {
             $(".k").attr("class", "k");
             $(this).attr("class", "k nav-active active");
@@ -125,7 +127,7 @@ $(document).ready(function () {
 
 
                 })
-            })
+            });
             loadProductsData(0, "");
 
 
@@ -175,28 +177,26 @@ $(document).ready(function () {
             loadProductRequestsData(0);
 
         });
-        $("#loadZonesButton").click(function () {
+        $("#loadAcceptedRequestsButton").click(function () {
             $(".k").attr("class", "k");
             $(this).attr("class", "k nav-active active");
-            $("#addNewDiv").html('<button id="addNewButton" data-target="#myModal" class="btn btn-sm btn-dark"><i class="fa fa-plus"></i>ახალი ზონის დამატება</button>')
+            $("#addNewDiv").html('')
+            loadAcceptedRequests(0)
+        });
+        $("#loadTendersButton").click(function () {
+            $(".k").attr("class", "k");
+            $(this).attr("class", "k nav-active active");
+            $("#addNewDiv").html('<button id="addNewButton" data-target="#myModal" class="btn btn-sm btn-dark"><i class="fa fa-plus"></i>ახალი ტენდერის შექმნა </button>');
             $("#addNewButton").click(function () {
-
-                $("#myModalLabel").html("ახალი ზონის დამატება");
+                $("#myModalLabel").html("ახალი ტენდერის დამატება");
                 var modalBody = $("#modalBody");
-                modalBody.html(zoneRegistrationFormTemplate);
-                $.getJSON("api/getregions", function (result) {
-                    if (result) {
-                        for (i = 0; i < result.length; i++) {
-                            $("#regionIdField").append("<option value='" + result[i]["id"] + "'>" + result[i]["name"] + "</option>")
-                        }
-                    }
-                })
-                $('#myModal').modal("show");
-                $("#registrationModalSaveButton").unbind();
+                modalBody.html(tenderRegistrationFormTemplate);
+                $("#registrationModalSaveButton").unbind()
                 $("#registrationModalSaveButton").click(function () {
                     var registerData = {
-                        zoneName: $("#nameField").val().trim(),
-                        regionId: $("#regionIdField").val().trim()
+                        name: $("#nameField").val().trim(),
+                        startDate: new Date($("#dateStartField").val()),
+                        endDate:new Date($("#dateEndField").val())
                     }
                     var valid = true;
                     for (key in registerData) {
@@ -206,12 +206,12 @@ $(document).ready(function () {
                     }
                     if (valid) {
                         $.ajax({
-                            url: "api/createzone",
+                            url: "/createtender",
                             method: "POST",
                             data: registerData
                         }).done(function (msg) {
                             if (msg) {
-                                loadZonesData()
+                                loadTenders(0)
                                 $('#myModal').modal("hide");
                             } else {
                                 $('#myModal').modal("hide");
@@ -221,20 +221,68 @@ $(document).ready(function () {
                     } else {
                         alert("შეავსეთ ყველა ველი რეგისტრაციისთვის")
                     }
+
+
                 });
-            })
-            loadZonesData()
+                $('#myModal').modal("show");
+            });
+            loadTenders(0);
         })
     }
 
     if (readCookie("projectUserType") === "3") {
         navigation.append('<li id="loadProductsButton" class="k">' +
             '<a href="#"><i class="icon-note"></i><span data-translate="პროდუქცია">პროდუქცია</span></a></li>');
+        navigation.append('<li id="loadProductRequestsButton" class="k">' +
+            '<a href="#"><i class="icon-note"></i><span data-translate="პროდუქციის მოთხოვნები">პროდუქციის მოთხოვნები</span></a></li>');
         $("#loadProductsButton").click(function () {
             $(".k").attr("class", "k");
             $(this).attr("class", "k nav-active active");
             loadProductsData(0, "");
+        });
+        $("#loadProductRequestsButton").click(function () {
+            $(".k").attr("class", "k");
+            $(this).attr("class", "k nav-active active");
+            $("#addNewDiv").html('');
+            $("#addNewButton").click(function () {
+                $("#myModalLabel").html("ახალი სერვისის ტიპის დამატება");
+                var modalBody = $("#modalBody");
+                modalBody.html(serviceTypeRegistrationFormTemplate);
+                $('#myModal').modal("show");
+                $("#registrationModalSaveButton").unbind()
+                $("#registrationModalSaveButton").click(function () {
+                    var registerData = {
+                        name: $("#nameField").val().trim(),
+                        price: $("#priceField").val().trim()
+                    }
+                    var valid = true;
+                    for (key in registerData) {
+                        if (registerData[key] == "") {
+                            valid = false
+                        }
+                    }
+                    if (valid) {
+                        $.ajax({
+                            url: "api/createservicetype",
+                            method: "POST",
+                            data: registerData
+                        }).done(function (msg) {
+                            if (msg) {
+                                loadProductRequestsData()
+                                $('#myModal').modal("hide");
+                            } else {
+                                $('#myModal').modal("hide");
+                                alert("მოხმდა შეცდომა. შეცდომის ხშირი განმეორების შემთხვევაში დაუკავშირდით ადმინისტრაციას.")
+                            }
+                        })
+                    } else {
+                        alert("შეავსეთ ყველა ველი რეგისტრაციისთვის")
+                    }
 
+
+                })
+            })
+            loadProductRequestsData(0);
 
         });
     }
@@ -249,4 +297,5 @@ $(document).ready(function () {
 
     loadProductsData(0, "");
 });
+
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="MySQL - goodwill@localhost" uuid="4d207dfd-984a-4fd0-8a85-ee45cea8c258">
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <schema-pattern>goodwill.*</schema-pattern>
+      <default-schemas>goodwill.*</default-schemas>
+    </data-source>
+  </component>
+</project>

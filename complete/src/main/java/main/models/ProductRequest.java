@@ -40,7 +40,13 @@ public class ProductRequest {
     @Column
     private Date sentToTenderDate;
 
+    @Column
     private String comment;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "tenderId")
+    private Tender tender;
 
     public ProductRequest(Filial filial) {
         this.filial = filial;
@@ -50,6 +56,7 @@ public class ProductRequest {
         this.sentToTender=false;
         this.sentToTenderDate=null;
         this.comment="";
+        this.tender=null;
 
 
     }
@@ -120,5 +127,21 @@ public class ProductRequest {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Tender getTender() {
+        return tender;
+    }
+
+    public void setTender(Tender tender) {
+        this.tender = tender;
     }
 }

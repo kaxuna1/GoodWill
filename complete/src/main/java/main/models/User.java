@@ -48,6 +48,14 @@ public class User {
     @JsonIgnore
     private List<Session> sessions;
 
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Tender> tenders;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Bid> bids;
+
     public User(long id){
         this.id=id;
     }
@@ -77,6 +85,8 @@ public class User {
         this.personalNumber = personalNumber;
         this.type = type;
         this.sessions = sessions;
+        this.bids=new ArrayList<Bid>();
+        this.tenders=new ArrayList<Tender>();
     }
 
 
@@ -185,5 +195,19 @@ public class User {
     }
 
 
+    public List<Tender> getTenders() {
+        return tenders;
+    }
 
+    public void setTenders(List<Tender> tenders) {
+        this.tenders = tenders;
+    }
+
+    public List<Bid> getBids() {
+        return bids;
+    }
+
+    public void setBids(List<Bid> bids) {
+        this.bids = bids;
+    }
 }

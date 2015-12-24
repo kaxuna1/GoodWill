@@ -2,8 +2,8 @@
  * Created by kakha on 11/12/2015.
  */
 
-function loadProductRequestsData(index) {
-    $.getJSON("/getallproductrequests?index=" + index, function (result) {
+function loadAcceptedRequests(index) {
+    $.getJSON("/getacceptedproductrequests?index="+index, function (result) {
         $("#dataGridHeader").html("");
         $("#dataGridBody").html("");
         $("#paginationUl").html("");
@@ -30,7 +30,7 @@ function loadProductRequestsData(index) {
             $("#dataGridBody").append("<tr>" +
                 "<td><input value='"+currentElement["id"]+"' class='checkboxParcel' type='checkbox' /></td>" +
                 "<td value='" + i + "' class='gridRow'>" + currentElement["filial"]["name"] + "</td>" +
-                "<td value='" + i + "' class='gridRow'>" + moment(new Date(currentElement["requestDate"])).locale("ka").format("LLLL")+ "</td>" +
+                "<td value='" + i + "' class='gridRow'>" + moment(new Date(currentElement["requestDate"])).locale("ka").format("LLLL") + "</td>" +
                 "<td value='" + i + "' class='gridRow'>" + currentElement["productRequestElements"].length + "</td>" +
                 "</tr>");
         }
@@ -38,18 +38,12 @@ function loadProductRequestsData(index) {
         gridRow.css('cursor', 'pointer');
         gridRow.unbind();
         gridRow.click(function () {
-            var modal3=$("#myModal3");
-            var confirmBtn=$("#confirmBtn").unbind();
-            var declineBtn=$("#declineBtn").unbind();
-            if(readCookie("projectUserType") === "3"){
-                confirmBtn.remove();
-                declineBtn.remove();
-            }
+            var modal5=$("#myModal5");
             console.log(dataArray[$(this).attr("value")]);
             var currentElement = dataArray[$(this).attr("value")];
-            var myModalLabel3=$("#myModalLabel3");
-            myModalLabel3.html("ფილიალი "+currentElement["filial"]["name"]);
-            var productsRequestDataTable=$("#productsRequestDataTable");
+            var myModalLabel5=$("#myModalLabel5");
+            myModalLabel5.html("მოთხოვნა ფილიალისგან "+currentElement["filial"]["name"]);
+            var productsRequestDataTable=$("#productsRequestDataTable3");
             productsRequestDataTable.html("");
             for(key in currentElement['productRequestElements']){
                 console.log(currentElement['productRequestElements'][key]);
@@ -61,39 +55,35 @@ function loadProductRequestsData(index) {
                     +quantTypes[currentElement['productRequestElements'][key]["product"]["quantType"]]+
                     "</td></tr>")
             }
+            $.getJSON("/getactivetenderslistforadding", function (result) {
+                $("#chooseTenderButtons").html("");
+                for(key in result){
+                    $("#chooseTenderButtons").append("<tr value='"+result[key]["id"]+"' class='tenderRow'><td>"+result[key]["name"]+"</td></tr>")
+                }
+                var tenderRow=$('.tenderRow');
+                tenderRow.css('cursor', 'pointer');
+                tenderRow.unbind();
+                tenderRow.click(function(){
+                    $.ajax({
+                        url:"/addrequesttotender",
+                        data:{
+                            productRequestId:currentElement["id"],
+                            tenderId:$(this).attr("value")
+                        }
+                    }).done(function (result) {
+                        if(result){
+                            loadAcceptedRequests(0);
+                            alert("წარმატებით დასრულდა მინიჭება");
+                            modal5.modal("hide");
+                        }else{
 
-            confirmBtn.click(function () {
-                $.getJSON("/confirmrequest?id="+currentElement["id"],function(result){
-                    if(result){
-                        loadProductRequestsData(0);
-                        alert("წარმატებით მოხდა მონაცემების განახლება");
-                        modal3.modal("hide");
-                    }
-                    else{
-                        alert("მოხდა შეცდომა");
-                        modal3.modal("hide");
-                    }
-
-                })
+                        }
+                    })
+                });
             });
-            declineBtn.click(function () {
-                var comment=prompt("შეიყვანეთ კომენტარი","");
-                $.getJSON("/declinerequest?id="+currentElement["id"]+"&comment="+comment,function(result){
-                    if(result){
-                        loadProductRequestsData(0);
-                        alert("წარმატებით მოხდა მონაცემების განახლება");
-                        modal3.modal("hide");
-                    }
-                    else{
-                        alert("მოხდა შეცდომა");
-                        modal3.modal("hide");
-                    }
+            modal5.modal("show");
 
-                })
-            })
+        });
 
-            modal3.modal("show");
-
-        })
-    });
+    })
 }

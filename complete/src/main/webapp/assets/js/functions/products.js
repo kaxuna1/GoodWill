@@ -28,66 +28,6 @@ function loadProductsData(index, search) {
         var checkboxParcel=$(".checkboxParcel");
         checkboxParcel.unbind();
         checkboxParcel.change(function(){
-            if(readCookie("projectUserType") === "6"){
-                var oneChecked=false;
-                checkboxParcel.each(function () {
-                    if(this.checked){
-                        oneChecked=true;
-                    }
-
-                });
-                if(oneChecked){
-                    if(!addZoneToSelectedVisible){
-                        topPanelButtons.append('<li  id="addZoneToSelectedLi"><Button  id="addZoneToSelected" class="btn-default">ზონის მინიჭება</Button></li>')
-                        addZoneToSelectedVisible=true;
-                        $("#addZoneToSelected").click(function () {
-                            var parcelIDArray=[];
-                            checkboxParcel.each(function(){
-                                parcelIDArray.push(this.value) ;
-                                this.checked=false;
-                            });
-                            $("#addZoneToSelectedLi").remove();
-                            addZoneToSelectedVisible=false;
-
-                            showGiveZoneDialog(parcelIDArray);
-
-                        })
-                    }
-                }else{
-                    $("#addZoneToSelectedLi").remove();
-                    addZoneToSelectedVisible=false;
-                }
-            }
-            if(readCookie("projectUserType") === "7"){
-                var oneChecked=false;
-                checkboxParcel.each(function () {
-                    if(this.checked){
-                        oneChecked=true;
-                    }
-
-                });
-                if(oneChecked){
-                    if(!addZoneToSelectedVisible){
-                        topPanelButtons.append('<li  id="addCourierToSelectedLi"><Button  id="addCourierToSelected" class="btn-default">კურიერზე მინიჭება</Button></li>')
-                        addZoneToSelectedVisible=true;
-                        $("#addCourierToSelected").click(function () {
-                            var parcelIDArray=[];
-                            checkboxParcel.each(function(){
-                                parcelIDArray.push(this.value) ;
-                                this.checked=false;
-                            });
-                            $("#addCourierToSelectedLi").remove();
-                            addZoneToSelectedVisible=false;
-
-                            showGiveZoneDialog(parcelIDArray);
-
-                        })
-                    }
-                }else{
-                    $("#addCourierToSelectedLi").remove();
-                    addZoneToSelectedVisible=false;
-                }
-            }
         })
         var gridRow=$('.gridRow');
         gridRow.css('cursor', 'pointer');
@@ -148,10 +88,10 @@ function loadProductsData(index, search) {
         else {
             $("#addNewDiv").html('<button id="addNewButton" data-target="#myModal" class="btn btn-sm btn-dark"><i class="fa fa-plus"></i>პროდუქციის მოთხოვნა</button>')
             $("#addNewButton").click(function (){
-                $("#myModalLabel3").html("პროდუქციის მოთხოვნა");
+                $("#myModalLabel4").html("პროდუქციის მოთხოვნა");
                 $.getJSON("/getmyfilialproductslist", function (result) {
                     console.log(result);
-                    var filialProductsDataTable=$("#productsRequestDataTable");
+                    var filialProductsDataTable=$("#productsRequestDataTable2");
                     filialProductsDataTable.html("");
                     for(key in result){
                         filialProductsDataTable.append("<tr><td> "+result[key].name+": <input class='requestInput' type='number' name='"+result[key].id+"'></td></tr>")
@@ -172,7 +112,7 @@ function loadProductsData(index, search) {
                             type: "POST"
                         }).done(function (result) {
                             if(result){
-                                $('#myModal3').modal("hide");
+                                $('#myModal4').modal("hide");
                                 alert("მოთხოვნა მიღებულია");
 
 
@@ -181,7 +121,7 @@ function loadProductsData(index, search) {
                         console.log(sendData);
                     });
 
-                    $('#myModal3').modal("show");
+                    $('#myModal4').modal("show");
                 });
 
             });
