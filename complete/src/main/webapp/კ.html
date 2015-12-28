@@ -1,28 +1,32 @@
-<div class="panel">
-    <div class="panel-content">
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab1_1" data-toggle="tab" aria-expanded="true">Home</a></li>
-            <li class=""><a href="#tab1_2" data-toggle="tab" aria-expanded="false">Profile</a></li>
-            <li class=""><a href="#tab1_3" data-toggle="tab" aria-expanded="false">Other Tab</a></li>
-        </ul>
-        <div class="tab-content">
-            <div class="tab-pane fade active in" id="tab1_1">
-                <div class="row column-seperation">
-                    <div class="col-md-6 line-separator">
-                        <h3><strong>Big</strong> Title for your tab</h3>
-                        <h4>Customize your tab as you want easily</h4>
-                    </div>
-                    <div class="col-md-6">
-                        <p class="light"></p>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="tab1_2">
-                <p></p>
-            </div>
-            <div class="tab-pane fade" id="tab1_3">
-                <p></p>
-            </div>
-        </div>
-    </div>
+<div id="tree1" class="jstree jstree-1 jstree-default jstree-default-responsive" role="tree">
+    <ul class="jstree-container-ul">
+        <li role="treeitem" id="j1_1" class="jstree-node  jstree-leaf"><i class="jstree-icon jstree-ocl"></i><a
+                class="jstree-anchor" href="#"><i
+                class="jstree-icon jstree-themeicon fa fa-picture-o c-red jstree-themeicon-custom"></i>My pictures</a>
+        </li>
+        <li role="treeitem" aria-expanded="true" id="j1_2" class="jstree-node  jstree-open"><i
+                class="jstree-icon jstree-ocl"></i><a class="jstree-anchor" href="#"><i
+                class="jstree-icon jstree-themeicon fa fa-film c-orange jstree-themeicon-custom"></i>My videos</a>
+            <ul role="group" class="jstree-children">
+                <li role="treeitem" id="j1_3" class="jstree-node  jstree-leaf"><i class="jstree-icon jstree-ocl"></i><a
+                        class="jstree-anchor" href="#"><i
+                        class="jstree-icon jstree-themeicon fa fa-film c-orange jstree-themeicon-custom"></i>Video 1</a>
+                </li>
+                <li role="treeitem" id="j1_4" class="jstree-node  jstree-leaf jstree-last"><i
+                        class="jstree-icon jstree-ocl"></i><a class="jstree-anchor" href="#"><i
+                        class="jstree-icon jstree-themeicon fa fa-film c-orange jstree-themeicon-custom"></i>Video 2</a>
+                </li>
+            </ul>
+        </li>
+        <li role="treeitem" aria-expanded="false" id="j1_5" class="jstree-node  jstree-closed"><i
+                class="jstree-icon jstree-ocl"></i><a class="jstree-anchor" href="#"><i
+                class="jstree-icon jstree-themeicon fa fa-folder-o c-purple jstree-themeicon-custom"></i>My
+            documents</a></li>
+        <li role="treeitem" id="j1_8" class="jstree-node  jstree-leaf"><i class="jstree-icon jstree-ocl"></i><a
+                class="jstree-anchor" href="#"><i
+                class="jstree-icon jstree-themeicon fa fa-calendar c-green jstree-themeicon-custom"></i>Events</a></li>
+        <li role="treeitem" id="j1_9" class="jstree-node  jstree-leaf jstree-last"><i
+                class="jstree-icon jstree-ocl"></i><a class="jstree-anchor" href="#"><i
+                class="jstree-icon jstree-themeicon fa fa-envelope-o jstree-themeicon-custom"></i>Messages</a></li>
+    </ul>
 </div>

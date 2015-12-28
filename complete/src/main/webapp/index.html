@@ -44,6 +44,7 @@
     <link href="assets/css/theme.css" rel="stylesheet">
     <link href="assets/css/ui.css" rel="stylesheet">
     <link href="assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="assets/plugins/jstree/src/themes/default/style.min.css" rel="stylesheet">
     <script src="assets/plugins/modernizr/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 </head>
 <!-- BEGIN BODY -->
@@ -340,7 +341,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="myModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -387,6 +387,60 @@
                 </div>
             </div>
             <div id="parcelModelFooter5" class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">დახურვა</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+    <div class="modal-dialog" style="width: 700px" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel6"></h4>
+            </div>
+            <div id="modalBody6" class="modal-body">
+
+                <div style="display:inline-flex;width: 100%">
+
+                    <div class="panel" style="width: 100%">
+                        <div class="panel-content">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#tab2_1" data-toggle="tab" aria-expanded="true">ინფორმაცია ტენდერზე</a></li>
+                                <li class=""><a href="#tab2_2" data-toggle="tab" aria-expanded="false">მოთხოვნები ტენდერში</a></li>
+                                <li class=""><a href="#tab2_3" data-toggle="tab" aria-expanded="false">პროდუქცია ტენდერში</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane fade active in" id="tab2_1">
+                                    <table class="table table-hover dataTable">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                ველი
+                                            </th>
+                                            <th>
+                                                მნიშვნელობა
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="tenderDataTable">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="tab2_2">
+                                    <div id="tenderRequestsTree"></div>
+                                </div>
+                                <div class="tab-pane fade" id="tab2_3">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="parcelModelFooter6" class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">დახურვა</button>
             </div>
 
@@ -441,7 +495,7 @@
 <script src="assets/js/jquery.jeditable.mini.js"></script>
 <script src="assets/js/jquery-ui.js"></script>
 <script src="assets/js/bootstrap-datetimepicker.min.js"></script>
-
+<script src="assets/plugins/jstree/jstree.min.js"></script>
 
 <!--
 

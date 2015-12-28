@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/*
  * Created by kakha on 11/25/2015.
  */
 @Controller
@@ -38,8 +38,8 @@ public class FilialController {
     @ResponseBody
     public Filial giveFilialProducts(@RequestParam(value="parcelIds") ArrayList<Long> productIds, long filialId){
         Filial filial=filialRepository.findOne(filialId);
-        for (int i = 0; i < productIds.size(); i++) {
-            filial.getProducts().add(productRepository.findOne(productIds.get(i)));
+        for (Long productId : productIds) {
+            filial.getProducts().add(productRepository.findOne(productId));
         }
         return filial;
     }
