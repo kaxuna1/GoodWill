@@ -186,7 +186,10 @@ $(document).ready(function () {
         $("#loadTendersButton").click(function () {
             $(".k").attr("class", "k");
             $(this).attr("class", "k nav-active active");
-            $("#addNewDiv").html('<button id="addNewButton" data-target="#myModal" class="btn btn-sm btn-dark"><i class="fa fa-plus"></i>ახალი ტენდერის შექმნა </button>');
+            $("#addNewDiv").html('<button id="addNewButton" data-target="#myModal" class="btn btn-sm btn-dark"><i class="fa fa-plus"></i>ახალი ტენდერის შექმნა </button>' +
+                '<button id="loadBeforeStarted" data-target="#myModal" class="btn btn-sm btn"><i class=""></i>მიმდინარე ტენდერები</button>' +
+                '<button id="loadStarted" data-target="#myModal" class="btn btn-sm btn"><i class=""></i>დაწყებული ტენდერები</button>' +
+                '<button id="loadEnded" data-target="#myModal" class="btn btn-sm"><i class=""></i>დასრულებული ტენდერები</button>');
             $("#addNewButton").click(function () {
                 $("#myModalLabel").html("ახალი ტენდერის დამატება");
                 var modalBody = $("#modalBody");
@@ -195,8 +198,8 @@ $(document).ready(function () {
                 $("#registrationModalSaveButton").click(function () {
                     var registerData = {
                         name: $("#nameField").val().trim(),
-                        startDate: new Date($("#dateStartField").val()),
-                        endDate:new Date($("#dateEndField").val())
+                        startDate: moment($("#dateStartField").val()).toDate(),
+                        endDate: moment($("#dateEndField").val()).toDate()
                     }
                     var valid = true;
                     for (key in registerData) {
@@ -211,7 +214,7 @@ $(document).ready(function () {
                             data: registerData
                         }).done(function (msg) {
                             if (msg) {
-                                loadTenders(0)
+                                loadTenders(0,1)
                                 $('#myModal').modal("hide");
                             } else {
                                 $('#myModal').modal("hide");
@@ -226,8 +229,18 @@ $(document).ready(function () {
                 });
                 $('#myModal').modal("show");
             });
-            loadTenders(0);
+            $("#loadBeforeStarted").click(function () {
+                loadTenders(0,1);
+            });
+            $("#loadStarted").click(function () {
+                loadTenders(0,2);
+            });
+            $("#loadEnded").click(function () {
+                loadTenders(0,3);
+            });
+            loadTenders(0,1);
         })
+        loadProductsData(0,"");
     }
 
     if (readCookie("projectUserType") === "3") {
@@ -285,17 +298,40 @@ $(document).ready(function () {
             loadProductRequestsData(0);
 
         });
+
+        loadProductRequestsData(0,"");
+    }
+
+    if (readCookie("projectUserType") === "4") {
+        navigation.append('<li id="loadTendersButton" class="k">' +
+            '<a href="#"><i class="icon-layers"></i><span data-translate="ტენდერები">მიმდინარე ტენდერები</span></a></li>');
+        navigation.append('<li id="loadMyWonTenders" class="k">' +
+            '<a href="#"><i class="icon-layers"></i><span data-translate="ტენდერები">ჩემი მოგებული ტენდერები</span></a></li>');
+        $("#loadTendersButton").click(function () {
+            $(".k").attr("class", "k");
+            $(this).attr("class", "k nav-active active");
+            $("#addNewDiv").html('');
+            loadTenders(0,2);
+        });
+        $("#loadMyWonTenders").click(function () {
+            $(".k").attr("class", "k");
+            $(this).attr("class", "k nav-active active");
+            $("#addNewDiv").html('');
+            loadTenders(0,4);
+        });
+        loadTenders(0,2);
     }
 
     if (readCookie("projectUserType") === "1" || readCookie("projectUserType") === "2" || readCookie("projectUserType") === "3") {
         canCreateUsers = true;
     }
+
     if (readCookie("projectUserType") === "1" || readCookie("projectUserType") === "2") {
         canCreateProduct = true;
     }
 
 
-    loadProductsData(0, "");
+    //loadProductsData(0, "");
 });
 
 

@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="Gradle : complete : api.war (exploded)">
-    <output-path>$PROJECT_DIR$/classes/artifacts/complete/exploded/api.war</output-path>
+    <output-path>$PROJECT_DIR$/build/classes/artifacts/complete/exploded/api.war</output-path>
     <properties id="gradle-properties">
       <options external-project-path="$PROJECT_DIR$" />
     </properties>
@@ -87,7 +87,7 @@
         </element>
       </element>
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/classes/artifacts/complete/exploded/api.war/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/build/classes/artifacts/complete/exploded/api.war/META-INF/MANIFEST.MF" />
       </element>
     </root>
   </artifact>

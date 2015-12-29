@@ -1,9 +1,8 @@
 package main.controllers;
 
 import main.Repositorys.*;
-import main.models.ProductRequest;
-import main.models.Tender;
-import main.models.User;
+import main.models.*;
+import main.models.Enum.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +32,31 @@ public class TenderController {
         }
         return true;
     }
+    @RequestMapping("/deletetender")
+    @ResponseBody
+    public boolean deleteTender(@CookieValue("projectSessionId") long sessionId,long id){
+        try {
+            if(sessionRepository.findOne(sessionId).getUser().getType()==UserType.sa.getCODE()){
+                Tender tender=tenderRepository.findOne(id);
+                for(int i=0;i<tender.getProductRequests().size();i++){
+                    ProductRequest productRequest=tender.getProductRequests().get(i);
+                    productRequest.setTender(null);
+                    productRequest.setSentToTender(false);
+                    productRequest.setSentToTenderDate(null);
+                    productRequestRepository.save(productRequest);
+                }
+                tender.getProductRequests().clear();
+                tenderRepository.save(tender);
+                tenderRepository.delete(id);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
+
+        return true;
+    }
     @RequestMapping("/addrequesttotender")
     @ResponseBody
     public boolean addProductRequestToTender(long productRequestId,long tenderId){
@@ -59,8 +83,25 @@ public class TenderController {
 
     @RequestMapping("/getactivetenders")
     @ResponseBody
-    public Page<Tender> getActiveTenders(int index){
-        return tenderRepository.findByActive(true,constructPageSpecification(index));
+    public Page<Tender> getActiveTenders(@CookieValue("projectSessionId") long sessionId,int index,int type){
+        Session session =sessionRepository.findOne(sessionId);
+        if(session.getUser().getType()== UserType.sa.getCODE()||session.getUser().getType()== UserType.admin.getCODE()){
+
+            switch (type){
+                case 1:return tenderRepository.findByActive(true,constructPageSpecification(index));
+                case 2: return tenderRepository.findByStartedAndEnded(true,false,constructPageSpecification(index));
+                case 3: return tenderRepository.findByStartedAndEnded(true,true,constructPageSpecification(index));
+                default:return null;
+            }
+        }else{
+            switch (type){
+                case 2:
+                    return tenderRepository.findByStartedAndEnded(true,false,constructPageSpecification(index));
+                case 4:
+                    return tenderRepository.finMyWond(session.getUser(),constructPageSpecification(index));
+                default:return null;
+            }
+        }
     }
 
     private Pageable constructPageSpecification(int pageIndex) {
