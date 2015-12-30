@@ -18,7 +18,7 @@ public class ProductRequest {
     private long id;
 
 
-    @OneToMany(mappedBy = "productRequest",cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "productRequest",cascade = CascadeType.ALL)
     private List<ProductRequestElement> productRequestElements;
 
     @ManyToOne

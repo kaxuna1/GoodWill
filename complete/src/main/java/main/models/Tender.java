@@ -36,15 +36,11 @@ public class Tender {
 
 
 
-    @OneToMany(mappedBy = "tender",cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "tender",cascade = CascadeType.ALL)
     private List<ProductRequest> productRequests;
 
-    @OneToMany(mappedBy = "tender",cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "tender",cascade = CascadeType.ALL)
     private List<Bid> bids;
-
-    @OneToOne
-    @JoinColumn(name = "bidId")
-    private Bid winningBid;
 
     @ManyToOne
     @JoinColumn(name = "userId")
@@ -62,7 +58,6 @@ public class Tender {
         this.createDate=new Date();
         this.active=true;
         this.bids=new ArrayList<Bid>();
-        this.winningBid=null;
         this.productRequests=new ArrayList<ProductRequest>();
         this.ended=false;
         this.started=false;
@@ -132,14 +127,6 @@ public class Tender {
 
     public void setBids(List<Bid> bids) {
         this.bids = bids;
-    }
-
-    public Bid getWinningBid() {
-        return winningBid;
-    }
-
-    public void setWinningBid(Bid winningBid) {
-        this.winningBid = winningBid;
     }
 
     public User getUser() {

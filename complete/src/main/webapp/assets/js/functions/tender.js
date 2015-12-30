@@ -41,8 +41,6 @@ function loadTenders(index,type) {
         gridRow.css('cursor', 'pointer');
         gridRow.unbind();
         gridRow.click(function () {
-            console.log($(this).attr("value"));
-            console.log(dataArray);
             var currentElement=dataArray[$(this).attr("value")];
             var modal6 = $("#myModal6");
             var tab2_2 = $("#tab2_2");
@@ -50,6 +48,8 @@ function loadTenders(index,type) {
             tab2_2.html('<div id="tenderRequestsTree"></div>');
             tab2_3.html('<div id="tenderProductsTree"></div>');
             tenderDataTable.html("");
+            $("#tenderPartNav").remove();
+            $("#tab2_4").remove();
             for (key in currentElement) {
                 //console.log(returnTenderDataListItem(key, currentElement[key]));
                 tenderDataTable.append(returnTenderDataListItem(key, currentElement[key]));
@@ -64,6 +64,18 @@ function loadTenders(index,type) {
                         }
                     })
                 })
+            }
+            if(readCookie("projectUserType") === "4"&& type==2){
+                var tenderTabs=$("#tenderTabs");
+                var tenderNavigation=$("#tenderNavigation");
+                tenderNavigation.append('<li id="tenderPartNav" class=""><a href="#tab2_4" data-toggle="tab" aria-expanded="false">მონაწილეობა</a></li>');
+                tenderTabs.append('<div class="tab-pane fade" id="tab2_4">' +
+                    '<table class="table">' +
+                    '<thead><tr><th>პროდუქციის ტიპი</th><th>შეთავაზება</th><th>მიმდინარე</th></tr></thead>' +
+                    '<tbody id="tenderPartTable"></tbody>' +
+                    '</table>' +
+                    '</div>');
+
             }
             var tenderRequestsTree = $("#tenderRequestsTree");
             var tenderProductsTree = $("#tenderProductsTree");
@@ -105,7 +117,8 @@ function loadTenders(index,type) {
                             =parseInt(currentElement['productRequests'][key]["productRequestElements"][key2]['quantity']);
                         tenderProductsDataObject[currentElement['productRequests'][key]["productRequestElements"][key2]["product"]["name"]]['quantType']
                             =quantTypes[currentElement['productRequests'][key]["productRequestElements"][key2]["product"]["quantType"]];
-                        //console.log(parseInt(currentElement['productRequests'][key]["productRequestElements"][key2]['quantity']));
+                        tenderProductsDataObject[currentElement['productRequests'][key]["productRequestElements"][key2]["product"]["name"]]['id']
+                            =currentElement['productRequests'][key]["productRequestElements"][key2]["product"]["id"];
                     }
 
                     productRequest["children"].push({
@@ -118,8 +131,15 @@ function loadTenders(index,type) {
                 }
                 tenderTreeObject['core']['data'].push(productRequest);
             }
-            console.log(tenderProductsDataObject);
             for(key in tenderProductsDataObject){
+                $("#tenderPartTable").append("<tr>" +
+                    "<td>"+ key +" "+ tenderProductsDataObject[key]['sum']+" "+tenderProductsDataObject[key]['quantType'] +"</td>" +
+                    "<td><input id='input"+tenderProductsDataObject[key]['id']+"' pattern='[0-9]+([\.,][0-9]+)?' step='0.01' class='form-control' style='width: 50%;' type='number'>" +
+                    "<button value='"
+                    +tenderProductsDataObject[key]['id']+"' class='submitBid btn btn-dark'>შეთავაზების გაკეთება</button></td>" +
+                    "<td id='productBestBid"+tenderProductsDataObject[key]['id']+"'>0.0</td>" +
+                    "</tr>");
+
                 tenderProductsTreeObject['core']['data'].push({
                     'text': key +" "+ tenderProductsDataObject[key]['sum']+" "+tenderProductsDataObject[key]['quantType'] ,
                     "icon": "fa fa-star-o",
@@ -128,7 +148,35 @@ function loadTenders(index,type) {
                     }
                 });
             }
-
+            $(".submitBid").click(function () {
+                var currentObject=this;
+                $.ajax({
+                    url:"/makebid",
+                    data:{
+                        tenderId:currentElement['id'],
+                        productId:$(this).attr("value"),
+                        bidSum:$("#input"+$(currentObject).attr("value")).val()
+                    }
+                }).done(function (result) {
+                    if(result){
+                        $("#input"+$(currentObject).attr("value")).val("");
+                        alert("შემოთავაზება მიღებულია");
+                    }else{
+                        alert("მოხდა შეცდომა");
+                    }
+                })
+            });
+            var t = setInterval(function(){
+                $.getJSON('/gettenderbestbids?id='+currentElement["id"], function (result) {
+                    console.log(result);
+                    for(key in result){
+                        $("#productBestBid"+result[key]['product']['id']).html(result[key]['bid'])
+                    }
+                })
+            },2000);
+            modal6.on('hidden.bs.modal', function () {
+                clearInterval(t);
+            });
             tenderProductsTree.jstree(tenderProductsTreeObject);
             tenderRequestsTree.jstree(tenderTreeObject);
             for (key in currentElement["productRequests"]) {

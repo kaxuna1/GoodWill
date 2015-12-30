@@ -32,6 +32,10 @@ public class Product {
     @JsonIgnore
     private List<ProductRequestElement> productRequestElements;
 
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Bid> bids;
+
 
 
     public Product(String name, int quantType) {

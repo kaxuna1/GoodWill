@@ -11,8 +11,6 @@ $.getJSON("/getsessionstatus", function (result) {
     }
 });
 $(document).ready(function () {
-    console.log($("#loadParcelsButton"));
-
     $("#logoutBtn").click(function () {
         $.getJSON("/logout", function (result) {
             if (result) {
@@ -298,15 +296,15 @@ $(document).ready(function () {
             loadProductRequestsData(0);
 
         });
-
         loadProductRequestsData(0,"");
     }
-
     if (readCookie("projectUserType") === "4") {
         navigation.append('<li id="loadTendersButton" class="k">' +
             '<a href="#"><i class="icon-layers"></i><span data-translate="ტენდერები">მიმდინარე ტენდერები</span></a></li>');
         navigation.append('<li id="loadMyWonTenders" class="k">' +
             '<a href="#"><i class="icon-layers"></i><span data-translate="ტენდერები">ჩემი მოგებული ტენდერები</span></a></li>');
+        navigation.append('<li id="loadEndedTenders" class="k">' +
+            '<a href="#"><i class="icon-layers"></i><span data-translate="ტენდერები">დასრულებული ტენდერები</span></a></li>');
         $("#loadTendersButton").click(function () {
             $(".k").attr("class", "k");
             $(this).attr("class", "k nav-active active");
@@ -318,6 +316,12 @@ $(document).ready(function () {
             $(this).attr("class", "k nav-active active");
             $("#addNewDiv").html('');
             loadTenders(0,4);
+        });
+        $("#loadEndedTenders").click(function () {
+            $(".k").attr("class", "k");
+            $(this).attr("class", "k nav-active active");
+            $("#addNewDiv").html('');
+            loadTenders(0,3);
         });
         loadTenders(0,2);
     }

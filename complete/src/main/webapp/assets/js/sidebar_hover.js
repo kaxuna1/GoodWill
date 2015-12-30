@@ -16,10 +16,10 @@ function sidebarHover(){
     if($('.logopanel2').length == 0){
         $('.topnav').prepend('<div class="logopanel2"><h1><a href="dashboard.html"></a></h1></div>');
     }
-    
+
     if($('body').hasClass('rtl')) {
         $sidebar.css('margin-left', '').css('margin-right', '');
-        $('.sidebar .sidebar-footer').css('left', '').css('right', '');       
+        $('.sidebar .sidebar-footer').css('left', '').css('right', '');
          $('html').on('mouseenter', 'body.rtl.sidebar-hover .sidebar', function(){
             TweenMax.to($sidebar, 0.35, { css: {marginRight: 0,opacity:1},ease: Circ.easeInOut,delay: 0});
             TweenMax.to($('.sidebar .sidebar-footer'), 0.35, {css: {right: 0,opacity:1},ease: Circ.easeInOut,delay: 0 });
@@ -36,7 +36,7 @@ function sidebarHover(){
             else{
                 TweenMax.to($sidebar, 0.35, {css: {marginRight: -220,opacity:0}, ease: Circ.easeInOut,delay: 0});
                 TweenMax.to($('.sidebar .sidebar-footer'), 0.35, {css: {right: -220,opacity:0},ease: Circ.easeInOut,delay: 0});
-            }  
+            }
         });
     }
 
@@ -57,8 +57,10 @@ function sidebarHover(){
             else{
                 TweenMax.to($sidebar, 0.35, {css: {marginLeft: -220,opacity:0}, ease: Circ.easeInOut,delay: 0});
                 TweenMax.to($('.sidebar .sidebar-footer'), 0.35, {css: {left: -220,opacity:0},ease: Circ.easeInOut,delay: 0});
-            }  
+            }
         });
     }
 
 };
+
+

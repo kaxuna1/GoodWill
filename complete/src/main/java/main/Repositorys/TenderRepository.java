@@ -18,14 +18,17 @@ import java.util.List;
  */
 @Transactional
 public interface TenderRepository extends JpaRepository<Tender, Long> {
-    Page<Tender> findByActive(@Param("active")boolean active, Pageable pageable);
+    Page<Tender> findByActiveAndEnded(@Param("active")boolean active,@Param("ended")boolean ended, Pageable pageable);
     List<Tender> findByActiveAndStarted(@Param("active")boolean active,@Param("started")boolean started);
 
     @Query("select u from Tender u WHERE u.active=:active and u.started=:started and u.ended=:ended and u.startDate<:startDate")
     List<Tender> findForStart(@Param("active")boolean active, @Param("started")boolean started, @Param("ended")boolean ended, @Param("startDate")Date startDate);
 
+    @Query("select u from Tender u WHERE u.active=:active and u.started=:started and u.ended=:ended and u.endDate<:endDate")
+    List<Tender> findForEnd(@Param("active")boolean active, @Param("started")boolean started, @Param("ended")boolean ended, @Param("endDate")Date endDate);
+
     Page<Tender> findByStartedAndEnded(@Param("started")boolean started,@Param("ended")boolean ended, Pageable pageable);
 
-    @Query("select u from Tender u WHERE u.winningBid.user=:user")
+    @Query("select u from Tender u")
     Page<Tender> finMyWond(@Param("user")User user,Pageable pageable);
 }

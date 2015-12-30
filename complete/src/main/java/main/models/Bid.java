@@ -24,13 +24,25 @@ public class Bid {
     private Tender tender;
 
     @ManyToOne
+    @JoinColumn(name = "productId")
+    private Product product;
+
+    @Column
+    private boolean winningBid;
+
+    @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
 
-    public Bid(double bid, Tender tender, User user) {
+    public Bid(double bid, Tender tender, User user, Product product) {
         this.bid = bid;
         this.tender = tender;
         this.user = user;
+        this.winningBid=false;
+        this.product = product;
+    }
+    public Bid(){
+
     }
 
     public long getId() {
@@ -63,5 +75,21 @@ public class Bid {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public boolean isWinningBid() {
+        return winningBid;
+    }
+
+    public void setWinningBid(boolean winningBid) {
+        this.winningBid = winningBid;
     }
 }

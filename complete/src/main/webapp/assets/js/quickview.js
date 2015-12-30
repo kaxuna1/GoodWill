@@ -95,7 +95,7 @@ function quickviewSidebar() {
             setTimeout(function () {
               $('.settings-chart .setting2').progressbar();
             }, 400);
-            
+
 
         });
     };
